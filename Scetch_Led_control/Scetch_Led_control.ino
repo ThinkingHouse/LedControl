@@ -13,6 +13,7 @@
 //! Подключение заголовочных файлов
 #include "http_server.h"
 
+
 //! Глобальные данные
 
 //! Макроопределения
@@ -23,11 +24,11 @@
 
 //! Глобальные функции
 
-void setup() {
+void setup() 
+{
 	delay(1000);
-	Serial.begin(115200);
-	Serial.println();
-	Serial.print("Configuring access point...");
+	init_debug();
+	INFO("Старт настройки сервера");
   init_server();
 }
 
