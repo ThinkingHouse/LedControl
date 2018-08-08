@@ -14,6 +14,7 @@
 #define _HTTP_SERVER_H_
 //! Подключение заголовочных файлов
 #include "common.h"
+#include "led_api.h"
 
 //! Глобальные данные
 

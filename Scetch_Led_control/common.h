@@ -29,7 +29,9 @@ typedef enum
 //! Макроопределения
 #define HTTP_SERVER_PORT    80
 
-#define INFO(a)    print_log(a, INFO);
+#define INFO(a)     print_log(a, INFO);
+#define DEBUG(a)    print_log(a, DEBUG);
+#define TRACE(a)    print_log(a, TRACE);
 
 //! Глобальные функции
 void init_debug(void);

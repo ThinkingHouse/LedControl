@@ -20,7 +20,7 @@ ESP8266WebServer server(80);
 //! Локальные Макроопределения
 
 //! Локальные функции
-void handleRoot() 
+void handle_main() 
 {
   server.send(200, "text/html", "<h1>You are connected</h1>");
 }
@@ -28,28 +28,18 @@ void handleRoot()
 
 
 //! Глобальные функции
-/*!
- *  \brief         Инициализация сервера
- *  
- */
 void init_server()
 {
-  //char* temp_ssid;
-  //sprintf(temp_ssid, "%s%d", "LedControl_", ESP.getChipId());
-  //ssid = (const char*) temp_ssid;
+  INFO("Старт настройки сервера");
   WiFi.softAP(ap_ssid);
 
   INFO("AP IP address: ");
   INFO(WiFi.softAPIP());
-  server.on("/", handleRoot);
+  server.on("/", handle_main);
   server.begin();
-  INFO("HTTP server started");
+  INFO("HTTP сервер запущен");
 }
  
-/*!
- *  \brief         Проверка запросов
- *  
- */
 void check_clinets()
 {
   server.handleClient();
