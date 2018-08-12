@@ -17,14 +17,39 @@
 const char *ap_ssid = "Led_control";
 ESP8266WebServer server(80);
 
+String main_page = "<!DOCTYPE html>" \
+                   "<html>" \
+                   "<head>"
+                   "  <meta charset=\"utf-8\">" \
+                   "  <title>Цвет</title>" \
+                   "</head>" \
+                   "<body>" \   
+                   "  <form action=\"set_color_1\">" \
+                   "    <p>Укажите цвет ленты 1: <input type=\"color\" name=\"color\" value=\"#ff0000\">" \
+                   "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
+                   "   </form>" \ 
+                   "</body>" \ 
+                   " </html>";
+
 //! Локальные Макроопределения
 
 //! Локальные функции
 void handle_main() 
 {
-  server.send(200, "text/html", "<h1>You are connected</h1>");
+  server.send(200, "text/html", main_page);
 }
 
+void handle_set_color()
+{
+  INFO("Получен запрос от клиента");
+  INFO(server.uri());
+  String color_str = server.arg("color");
+  const char *hexstring = color_str.substring(1).c_str();
+  int number = (int)strtol(hexstring, NULL, 16);
+  INFO("Получен цвет клиента");
+  INFO(String(number));
+  server.send(200, "text/html", main_page);
+}
 
 
 //! Глобальные функции
@@ -36,6 +61,7 @@ void init_server()
   INFO("AP IP address: ");
   INFO(WiFi.softAPIP());
   server.on("/", handle_main);
+  server.on("/set_color_1", handle_set_color);
   server.begin();
   INFO("HTTP сервер запущен");
 }
