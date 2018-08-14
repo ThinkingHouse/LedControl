@@ -15,12 +15,13 @@
 //! Подключение заголовочных файлов
 #include "common.h"
 #include <Adafruit_NeoPixel.h>
+#include <EEPROM.h>
 
 //! Глобальные данные
 
 //! Макроопределения
-#define LED_IN_PIN_1    D0
-#define LED_IN_PIN_2    D1
+#define LED_IN_PIN_1    D1
+#define LED_IN_PIN_2    D2
 #define LED_IN_PIN_3    D3
 #define LED_IN_PIN_4    D4
 
@@ -28,6 +29,11 @@
 #define LED_2_NUMBER_PIXELS      16
 #define LED_3_NUMBER_PIXELS      16
 #define LED_4_NUMBER_PIXELS      16
+
+#define LED_1_ADDRESS_START    0
+#define LED_2_ADDRESS_START    96
+#define LED_3_ADDRESS_START    192
+#define LED_4_ADDRESS_START    288
 
 //! Типы
 typedef enum
@@ -51,5 +57,12 @@ void init_leds(void);
  */
 void set_leds_colors(led_id_t led_id, int8_t red, int8_t green, int8_t blue);
 
+void set_brightness(led_id_t led_id, int8_t value);
+
+/*!
+ *  \brief         Обновить цвет светодода на ленте 
+ *  
+ */
+void update_leds_colors(led_id_t led_id);
 
 #endif
