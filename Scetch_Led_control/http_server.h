@@ -14,9 +14,7 @@
 #define _HTTP_SERVER_H_
 //! Подключение заголовочных файлов
 #include "common.h"
-#include <ESP8266WiFi.h>
-#include <WiFiClient.h> 
-#include <ESP8266WebServer.h>
+#include "led_api.h"
 
 //! Глобальные данные
 
