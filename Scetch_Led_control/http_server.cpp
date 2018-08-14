@@ -29,15 +29,15 @@ String main_page = "<!DOCTYPE html>" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \ 
                    "  <form action=\"set_color_2\">" \
-                   "    <p>Укажите цвет ленты 2: <input type=\"color\" name=\"color\" value=\"#ff0000\">" \
+                   "    <p>Укажите цвет ленты 2: <input type=\"color\" name=\"color\" value=\"#ff0000\"> <input type=\"text\" name=\"brightness\" value=\"255\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
                     "  <form action=\"set_color_3\">" \
-                   "    <p>Укажите цвет ленты 3: <input type=\"color\" name=\"color\" value=\"#ff0000\">" \
+                   "    <p>Укажите цвет ленты 3: <input type=\"color\" name=\"color\" value=\"#ff0000\"> <input type=\"text\" name=\"brightness\" value=\"255\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
                    "  <form action=\"set_color_4\">" \
-                   "    <p>Укажите цвет ленты 4: <input type=\"color\" name=\"color\" value=\"#ff0000\">" \
+                   "    <p>Укажите цвет ленты 4: <input type=\"color\" name=\"color\" value=\"#ff0000\"> <input type=\"text\" name=\"brightness\" value=\"255\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
                    "</body>" \ 
@@ -66,6 +66,7 @@ void handle_set_color_1()
   INFO(col);
   INFO(String(red) + String(" ") + String(green) + String(" ") + String(blue));
   set_leds_colors(LED_1, red, green, blue);
+  set_brightness(LED_1, server.arg("brightness").toInt());
   update_leds_colors(LED_1);
   server.send(200, "text/html", main_page);
 }
@@ -85,6 +86,7 @@ void handle_set_color_2()
   INFO(col);
   INFO(String(red) + String(" ") + String(green) + String(" ") + String(blue));
   set_leds_colors(LED_2, red, green, blue);
+  set_brightness(LED_2, server.arg("brightness").toInt());
   update_leds_colors(LED_2);
   server.send(200, "text/html", main_page);
 }
@@ -104,6 +106,7 @@ void handle_set_color_3()
   INFO(col);
   INFO(String(red) + String(" ") + String(green) + String(" ") + String(blue));
   set_leds_colors(LED_3, red, green, blue);
+  set_brightness(LED_3, server.arg("brightness").toInt());
   update_leds_colors(LED_3);
   server.send(200, "text/html", main_page);
 }
@@ -123,6 +126,7 @@ void handle_set_color_4()
   INFO(col);
   INFO(String(red) + String(" ") + String(green) + String(" ") + String(blue));
   set_leds_colors(LED_4, red, green, blue);
+  set_brightness(LED_4, server.arg("brightness").toInt());
   update_leds_colors(LED_4);
   server.send(200, "text/html", main_page);
 }

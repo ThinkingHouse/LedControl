@@ -83,6 +83,12 @@ void init_leds()
     led_4_colors[i][BLUE_COLOR] = EEPROM.read(LED_4_ADDRESS_START + address_cursor);
     address_cursor++;
   }
+
+  led_1_brightness = EEPROM.read(LED_1_BRIGHTNESS);
+  led_2_brightness = EEPROM.read(LED_2_BRIGHTNESS);
+  led_3_brightness = EEPROM.read(LED_3_BRIGHTNESS);
+  led_4_brightness = EEPROM.read(LED_4_BRIGHTNESS);
+  
   update_leds_colors(LED_1);
   update_leds_colors(LED_2);
   update_leds_colors(LED_3);
@@ -160,6 +166,34 @@ void set_leds_colors(led_id_t led_id, int8_t red, int8_t green, int8_t blue)
   EEPROM.end();
 }
 
+void set_brightness(led_id_t led_id, int8_t value)
+{
+  EEPROM.begin(512);
+  switch(led_id)
+  {
+    case LED_1:
+        EEPROM.write(LED_1_BRIGHTNESS, value);
+        led_1_brightness = value;
+      break;
+
+    case LED_2:
+        EEPROM.write(LED_2_BRIGHTNESS, value);
+        led_2_brightness = value;
+      break;
+
+    case LED_3:
+        EEPROM.write(LED_3_BRIGHTNESS, value);
+        led_3_brightness = value;
+      break;
+
+    case LED_4:
+        EEPROM.write(LED_4_BRIGHTNESS, value);
+        led_4_brightness = value;
+      break;
+  }
+  EEPROM.end();
+}
+
 void update_leds_colors(led_id_t led_id)
 {
   switch(led_id)
@@ -169,6 +203,7 @@ void update_leds_colors(led_id_t led_id)
       {
         INFO("Установка свеодиода " + String(i) + String(" ленты №1 цвета: ") + String(led_1_colors[i][RED_COLOR]) + String(led_1_colors[i][GREEN_COLOR]) + String(led_1_colors[i][BLUE_COLOR]));
         led_pixels_1.setPixelColor(i, led_pixels_1.Color(led_1_colors[i][RED_COLOR], led_1_colors[i][GREEN_COLOR], led_1_colors[i][BLUE_COLOR]));
+        led_pixels_1.setBrightness(led_1_brightness);
         led_pixels_1.show();
         delay(1);
       }
@@ -179,6 +214,7 @@ void update_leds_colors(led_id_t led_id)
       {
         INFO("Установка свеодиода " + String(i) + String(" ленты №2 цвета: ") + String(led_2_colors[i][RED_COLOR]) + String(led_2_colors[i][GREEN_COLOR]) + String(led_2_colors[i][BLUE_COLOR]));
         led_pixels_2.setPixelColor(i, led_pixels_2.Color(led_2_colors[i][RED_COLOR], led_2_colors[i][GREEN_COLOR], led_2_colors[i][BLUE_COLOR]));
+        led_pixels_2.setBrightness(led_2_brightness);
         led_pixels_2.show();
         delay(1);
       }
@@ -189,6 +225,7 @@ void update_leds_colors(led_id_t led_id)
       {
         INFO("Установка свеодиода " + String(i) + String(" ленты №3 цвета: ") + String(led_3_colors[i][RED_COLOR]) + String(led_3_colors[i][GREEN_COLOR]) + String(led_3_colors[i][BLUE_COLOR]));
         led_pixels_3.setPixelColor(i, led_pixels_3.Color(led_3_colors[i][RED_COLOR], led_1_colors[i][GREEN_COLOR], led_3_colors[i][BLUE_COLOR]));
+        led_pixels_3.setBrightness(led_3_brightness);
         led_pixels_3.show();
         delay(1);
       }
@@ -199,6 +236,7 @@ void update_leds_colors(led_id_t led_id)
       {
         INFO("Установка свеодиода " + String(i) + String(" ленты №4 цвета: ") + String(led_4_colors[i][RED_COLOR]) + String(led_4_colors[i][GREEN_COLOR]) + String(led_4_colors[i][BLUE_COLOR]));
         led_pixels_4.setPixelColor(i, led_pixels_4.Color(led_1_colors[i][RED_COLOR], led_4_colors[i][GREEN_COLOR], led_4_colors[i][BLUE_COLOR]));
+        led_pixels_4.setBrightness(led_4_brightness);
         led_pixels_4.show();
         delay(1);
       }

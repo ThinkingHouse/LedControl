@@ -35,6 +35,11 @@
 #define LED_3_ADDRESS_START    192
 #define LED_4_ADDRESS_START    288
 
+#define LED_1_BRIGHTNESS       300
+#define LED_2_BRIGHTNESS       301
+#define LED_3_BRIGHTNESS       302
+#define LED_4_BRIGHTNESS       303
+
 //! Типы
 typedef enum
 {
