@@ -43,5 +43,5 @@ void loop()
 {
 	check_clinets();
   do_programm();
-  delay(500);
+  delay(250);
 }

@@ -280,11 +280,11 @@ void do_programm()
       led_i = 0;
     }
     //INFO(led_i);
-    led_pixels_4.setPixelColor(j, led_pixels_4.Color(programm_1[led_i][1], programm_1[led_i][2], programm_1[led_i][3]));
-    led_pixels_4.setBrightness(programm_1[led_i][0]);
+    led_pixels_4.setPixelColor(j, led_pixels_4.Color(get_programm(led_4_programm, led_i, 1), get_programm(led_4_programm, led_i, 2), get_programm(led_4_programm, led_i, 3)));
+    led_pixels_4.setBrightness(get_programm(led_4_programm, led_i, 0));
     led_pixels_4.show();
     led_i++;
-    delay(10);
+    delay(1);
   }
   programm_head++;
   if (programm_head == 5)
