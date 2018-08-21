@@ -270,8 +270,8 @@ void do_programm()
     return;
   }
 
-  INFO("Выполняем программу");
-  //INFO(programm_head);
+  DEBUG("Выполняем программу");
+  DEBUG(led_4_programm);
   led_i = programm_head;
   for (int8_t j = 0; j < LED_4_NUMBER_PIXELS; j++)
   {

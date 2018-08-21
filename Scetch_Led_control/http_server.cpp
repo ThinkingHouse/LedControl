@@ -15,6 +15,7 @@
 
 //! Локальные данные
 const char *ap_ssid = "Led_control";
+const char *ap_password = "your-password";
 ESP8266WebServer server(80);
 
 String main_page = "<!DOCTYPE html>" \
@@ -132,19 +133,55 @@ void handle_set_color_4()
   server.send(200, "text/html", main_page);
 }
 
+void handleNotFound()
+{
+  String message = "File Not Found\n\n";
+  message += "URI: ";
+  message += server.uri();
+  message += "\nMethod: ";
+  message += (server.method() == HTTP_GET)?"GET":"POST";
+  message += "\nArguments: ";
+  message += server.args();
+  message += "\n";
+  for (uint8_t i=0; i<server.args(); i++){
+    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
+  }
+  server.send(404, "text/plain", message);
+}
+
 //! Глобальные функции
 void init_server()
 {
   INFO("Старт настройки сервера");
-  WiFi.softAP(ap_ssid);
 
-  INFO("AP IP address: ");
-  INFO(WiFi.softAPIP());
+  if (IS_AP_MODE)
+  {
+    WiFi.softAP(ap_ssid);
+    INFO("AP IP address: ");
+    INFO(WiFi.softAPIP());
+  }
+  else
+  {
+    INFO("Connecting to ");
+    INFO(String(ap_ssid));
+  
+    WiFi.begin(ap_ssid, ap_password);
+    while (WiFi.status() != WL_CONNECTED) 
+    {
+      delay(500);
+      Serial.print(".");
+    }
+    INFO("WiFi connected");
+    INFO(WiFi.localIP());
+  }
+  
+  
   server.on("/", handle_main);
   server.on("/set_color_1", handle_set_color_1);
   server.on("/set_color_2", handle_set_color_2);
   server.on("/set_color_3", handle_set_color_3);
   server.on("/set_color_4", handle_set_color_4);
+  server.onNotFound(handleNotFound);
   server.begin();
   INFO("HTTP сервер запущен");
 }
