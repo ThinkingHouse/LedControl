@@ -42,4 +42,6 @@ void setup()
 void loop() 
 {
 	check_clinets();
+  do_programm();
+  delay(250);
 }

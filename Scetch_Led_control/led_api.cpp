@@ -12,6 +12,7 @@
 
 //! Подключение заголовочных файлов
 #include "led_api.h"
+#include "programms.h"
 
 //! Локальные данные
 Adafruit_NeoPixel led_pixels_1 = Adafruit_NeoPixel(LED_1_NUMBER_PIXELS, LED_IN_PIN_1, NEO_GRB + NEO_KHZ800);
@@ -28,10 +29,14 @@ int8_t led_2_brightness = 255;
 int8_t led_3_brightness = 255;
 int8_t led_4_brightness = 255;
 
+int8_t led_4_programm = 0;
+int8_t programm_head = 0;
+
 //! Локальные Макроопределения
 #define RED_COLOR    0
 #define GREEN_COLOR  1
 #define BLUE_COLOR   2
+
 //! Локальные функции
 
 //! Глобальные функции
@@ -93,6 +98,8 @@ void init_leds()
   update_leds_colors(LED_2);
   update_leds_colors(LED_3);
   update_leds_colors(LED_4);
+
+  led_4_programm = EEPROM.read(LED_4_PROGRAMM);
   EEPROM.end();
   INFO("Инициализация светодиодных лент завершена");
 }
@@ -194,6 +201,14 @@ void set_brightness(led_id_t led_id, int8_t value)
   EEPROM.end();
 }
 
+void set_programm(int8_t value)
+{
+  EEPROM.begin(512);
+  led_4_programm = value;
+  EEPROM.write(LED_4_PROGRAMM, value);
+  EEPROM.end();
+}
+
 void update_leds_colors(led_id_t led_id)
 {
   switch(led_id)
@@ -232,15 +247,49 @@ void update_leds_colors(led_id_t led_id)
       break;
 
     case LED_4:
-      for (int i = 0; i < LED_4_NUMBER_PIXELS; i++)
+      if (led_4_programm == 0)
       {
-        INFO("Установка свеодиода " + String(i) + String(" ленты №4 цвета: ") + String(led_4_colors[i][RED_COLOR]) + String(led_4_colors[i][GREEN_COLOR]) + String(led_4_colors[i][BLUE_COLOR]));
-        led_pixels_4.setPixelColor(i, led_pixels_4.Color(led_1_colors[i][RED_COLOR], led_4_colors[i][GREEN_COLOR], led_4_colors[i][BLUE_COLOR]));
-        led_pixels_4.setBrightness(led_4_brightness);
-        led_pixels_4.show();
-        delay(1);
+        for (int i = 0; i < LED_4_NUMBER_PIXELS; i++)
+        {
+          INFO("Установка свеодиода " + String(i) + String(" ленты №4 цвета: ") + String(led_4_colors[i][RED_COLOR]) + String("-") + String(led_4_colors[i][GREEN_COLOR]) + String("-") + String(led_4_colors[i][BLUE_COLOR]));
+          led_pixels_4.setPixelColor(i, led_pixels_4.Color(led_1_colors[i][RED_COLOR], led_4_colors[i][GREEN_COLOR], led_4_colors[i][BLUE_COLOR]));
+          led_pixels_4.setBrightness(led_4_brightness);
+          led_pixels_4.show();
+          delay(1);
+        }
       }
       break;
+  }
+}
+
+void do_programm()
+{
+  int8_t led_i = 0;
+  if (led_4_programm == 0)
+  {
+    return;
+  }
+
+  DEBUG("Выполняем программу");
+  DEBUG(led_4_programm);
+  led_i = programm_head;
+  for (int8_t j = 0; j < LED_4_NUMBER_PIXELS; j++)
+  {
+    if (led_i == 5)
+    {
+      led_i = 0;
+    }
+    //INFO(led_i);
+    led_pixels_4.setPixelColor(j, led_pixels_4.Color(get_programm(led_4_programm, led_i, 1), get_programm(led_4_programm, led_i, 2), get_programm(led_4_programm, led_i, 3)));
+    led_pixels_4.setBrightness(get_programm(led_4_programm, led_i, 0));
+    led_pixels_4.show();
+    led_i++;
+    delay(1);
+  }
+  programm_head++;
+  if (programm_head == 5)
+  {
+    programm_head = 0;
   }
 }
 

@@ -14,7 +14,8 @@
 #include "http_server.h"
 
 //! Локальные данные
-const char *ap_ssid = "Led_control";
+const char *ap_ssid = "ASUS_Home";
+const char *ap_password = "1300703DronVip";
 ESP8266WebServer server(80);
 
 String main_page = "<!DOCTYPE html>" \
@@ -25,19 +26,19 @@ String main_page = "<!DOCTYPE html>" \
                    "</head>" \
                    "<body>" \   
                    "  <form action=\"set_color_1\">" \
-                   "    <p>Укажите цвет ленты 1: <input type=\"color\" name=\"color\" value=\"#ff0000\"> <input type=\"text\" name=\"brightness\" value=\"255\">" \
+                   "    <p>Укажите цвет ленты 1: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \ 
                    "  <form action=\"set_color_2\">" \
-                   "    <p>Укажите цвет ленты 2: <input type=\"color\" name=\"color\" value=\"#ff0000\"> <input type=\"text\" name=\"brightness\" value=\"255\">" \
+                   "    <p>Укажите цвет ленты 2: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
                     "  <form action=\"set_color_3\">" \
-                   "    <p>Укажите цвет ленты 3: <input type=\"color\" name=\"color\" value=\"#ff0000\"> <input type=\"text\" name=\"brightness\" value=\"255\">" \
+                   "    <p>Укажите цвет ленты 3: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
                    "  <form action=\"set_color_4\">" \
-                   "    <p>Укажите цвет ленты 4: <input type=\"color\" name=\"color\" value=\"#ff0000\"> <input type=\"text\" name=\"brightness\" value=\"255\">" \
+                   "    <p>Укажите цвет ленты 4: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\"> Программа: <input type=\"text\" name=\"programm\" value=\"0\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
                    "</body>" \ 
@@ -123,27 +124,63 @@ void handle_set_color_4()
   col = "0x" + String(color_str.c_str()[5]) + String(color_str.c_str()[6]);
   int blue = strtol(col.c_str(),NULL,0);
   INFO("Получен цвет");
-  INFO(col);
   INFO(String(red) + String(" ") + String(green) + String(" ") + String(blue));
   set_leds_colors(LED_4, red, green, blue);
   set_brightness(LED_4, server.arg("brightness").toInt());
+  set_programm(server.arg("programm").toInt());
   update_leds_colors(LED_4);
   server.send(200, "text/html", main_page);
+}
+
+void handleNotFound()
+{
+  String message = "File Not Found\n\n";
+  message += "URI: ";
+  message += server.uri();
+  message += "\nMethod: ";
+  message += (server.method() == HTTP_GET)?"GET":"POST";
+  message += "\nArguments: ";
+  message += server.args();
+  message += "\n";
+  for (uint8_t i=0; i<server.args(); i++){
+    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
+  }
+  server.send(404, "text/plain", message);
 }
 
 //! Глобальные функции
 void init_server()
 {
   INFO("Старт настройки сервера");
-  WiFi.softAP(ap_ssid);
 
-  INFO("AP IP address: ");
-  INFO(WiFi.softAPIP());
+  if (IS_AP_MODE)
+  {
+    WiFi.softAP(ap_ssid);
+    INFO("AP IP address: ");
+    INFO(WiFi.softAPIP());
+  }
+  else
+  {
+    INFO("Connecting to ");
+    INFO(String(ap_ssid));
+  
+    WiFi.begin(ap_ssid, ap_password);
+    while (WiFi.status() != WL_CONNECTED) 
+    {
+      delay(500);
+      Serial.print(".");
+    }
+    INFO("WiFi connected");
+    INFO(WiFi.localIP());
+  }
+  
+  
   server.on("/", handle_main);
   server.on("/set_color_1", handle_set_color_1);
   server.on("/set_color_2", handle_set_color_2);
   server.on("/set_color_3", handle_set_color_3);
   server.on("/set_color_4", handle_set_color_4);
+  server.onNotFound(handleNotFound);
   server.begin();
   INFO("HTTP сервер запущен");
 }
