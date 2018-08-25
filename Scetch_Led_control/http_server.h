@@ -15,6 +15,7 @@
 //! Подключение заголовочных файлов
 #include "common.h"
 #include "led_api.h"
+#include "wifi_module.h"
 
 //! Глобальные данные
 

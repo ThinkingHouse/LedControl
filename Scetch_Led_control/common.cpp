@@ -26,10 +26,6 @@ float get_time()
 }
 
 //! Глобальные функции
-/*!
- *  \brief         Инициализация дебага
- *  
- */
 void init_debug()
 {
   Serial.begin(115200);
@@ -38,10 +34,6 @@ void init_debug()
   INFO("Частота процессора " + String(cpu_freq));
 }
  
-/*!
- *  \brief         Проверка запросов
- *  
- */
 void print_log(String text, log_levels_t level)
 {
   Serial.print(get_time());Serial.print(" :: ");

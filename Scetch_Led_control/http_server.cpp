@@ -14,8 +14,6 @@
 #include "http_server.h"
 
 //! Локальные данные
-const char *ap_ssid = "ASUS_Home";
-const char *ap_password = "1300703DronVip";
 ESP8266WebServer server(80);
 
 String main_page = "<!DOCTYPE html>" \
@@ -152,29 +150,6 @@ void handleNotFound()
 void init_server()
 {
   INFO("Старт настройки сервера");
-
-  if (IS_AP_MODE)
-  {
-    WiFi.softAP(ap_ssid);
-    INFO("AP IP address: ");
-    INFO(WiFi.softAPIP());
-  }
-  else
-  {
-    INFO("Connecting to ");
-    INFO(String(ap_ssid));
-  
-    WiFi.begin(ap_ssid, ap_password);
-    while (WiFi.status() != WL_CONNECTED) 
-    {
-      delay(500);
-      Serial.print(".");
-    }
-    INFO("WiFi connected");
-    INFO(WiFi.localIP());
-  }
-  
-  
   server.on("/", handle_main);
   server.on("/set_color_1", handle_set_color_1);
   server.on("/set_color_2", handle_set_color_2);

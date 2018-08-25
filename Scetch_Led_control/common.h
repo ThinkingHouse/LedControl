@@ -36,7 +36,12 @@ typedef enum
 #define TRACE(a)    print_log(a, TRACE);
 
 //! Глобальные функции
+/*!
+ *  \brief         Инициализация дебага
+ *  
+ */
 void init_debug(void);
+
 void print_log(String text, log_levels_t level);
 void print_log(IPAddress text, log_levels_t level);
 #endif
