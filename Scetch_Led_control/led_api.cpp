@@ -216,7 +216,7 @@ void update_leds_colors(led_id_t led_id)
     case LED_1:
       for (int i = 0; i < LED_1_NUMBER_PIXELS; i++)
       {
-        INFO("Установка свеодиода " + String(i) + String(" ленты №1 цвета: ") + String(led_1_colors[i][RED_COLOR]) + String(led_1_colors[i][GREEN_COLOR]) + String(led_1_colors[i][BLUE_COLOR]));
+        INFO("Установка свеодиода " + String(i) + String(" ленты №1 цвета: ") + String(led_1_colors[i][RED_COLOR])  + String("|") +  String(led_1_colors[i][GREEN_COLOR])  + String("|") +  String(led_1_colors[i][BLUE_COLOR]));
         led_pixels_1.setPixelColor(i, led_pixels_1.Color(led_1_colors[i][RED_COLOR], led_1_colors[i][GREEN_COLOR], led_1_colors[i][BLUE_COLOR]));
         led_pixels_1.setBrightness(led_1_brightness);
         led_pixels_1.show();
@@ -227,7 +227,7 @@ void update_leds_colors(led_id_t led_id)
     case LED_2:
       for (int i = 0; i < LED_2_NUMBER_PIXELS; i++)
       {
-        INFO("Установка свеодиода " + String(i) + String(" ленты №2 цвета: ") + String(led_2_colors[i][RED_COLOR]) + String(led_2_colors[i][GREEN_COLOR]) + String(led_2_colors[i][BLUE_COLOR]));
+        INFO("Установка свеодиода " + String(i) + String(" ленты №2 цвета: ") + String(led_2_colors[i][RED_COLOR])  + String("|") +  String(led_2_colors[i][GREEN_COLOR])  + String("|") +  String(led_2_colors[i][BLUE_COLOR]));
         led_pixels_2.setPixelColor(i, led_pixels_2.Color(led_2_colors[i][RED_COLOR], led_2_colors[i][GREEN_COLOR], led_2_colors[i][BLUE_COLOR]));
         led_pixels_2.setBrightness(led_2_brightness);
         led_pixels_2.show();
@@ -238,8 +238,8 @@ void update_leds_colors(led_id_t led_id)
     case LED_3:
       for (int i = 0; i < LED_3_NUMBER_PIXELS; i++)
       {
-        INFO("Установка свеодиода " + String(i) + String(" ленты №3 цвета: ") + String(led_3_colors[i][RED_COLOR]) + String(led_3_colors[i][GREEN_COLOR]) + String(led_3_colors[i][BLUE_COLOR]));
-        led_pixels_3.setPixelColor(i, led_pixels_3.Color(led_3_colors[i][RED_COLOR], led_1_colors[i][GREEN_COLOR], led_3_colors[i][BLUE_COLOR]));
+        INFO("Установка свеодиода " + String(i) + String(" ленты №3 цвета: ") + String(led_3_colors[i][RED_COLOR])  + String("|") +  String(led_3_colors[i][GREEN_COLOR])  + String("|") +  String(led_3_colors[i][BLUE_COLOR]));
+        led_pixels_3.setPixelColor(i, led_pixels_3.Color(led_3_colors[i][RED_COLOR], led_3_colors[i][GREEN_COLOR], led_3_colors[i][BLUE_COLOR]));
         led_pixels_3.setBrightness(led_3_brightness);
         led_pixels_3.show();
         delay(1);
@@ -252,7 +252,7 @@ void update_leds_colors(led_id_t led_id)
         for (int i = 0; i < LED_4_NUMBER_PIXELS; i++)
         {
           INFO("Установка свеодиода " + String(i) + String(" ленты №4 цвета: ") + String(led_4_colors[i][RED_COLOR]) + String("|") + String(led_4_colors[i][GREEN_COLOR]) + String("|") + String(led_4_colors[i][BLUE_COLOR]));
-          led_pixels_4.setPixelColor(i, led_pixels_4.Color(led_1_colors[i][RED_COLOR], led_4_colors[i][GREEN_COLOR], led_4_colors[i][BLUE_COLOR]));
+          led_pixels_4.setPixelColor(i, led_pixels_4.Color(led_4_colors[i][RED_COLOR], led_4_colors[i][GREEN_COLOR], led_4_colors[i][BLUE_COLOR]));
           led_pixels_4.setBrightness(led_4_brightness);
           led_pixels_4.show();
           delay(1);

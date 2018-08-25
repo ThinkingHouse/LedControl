@@ -12,7 +12,11 @@
 
 //! Подключение заголовочных файлов
 #include "wifi_module.h"
-
+#ifdef ESP8266
+extern "C" {
+#include "user_interface.h"
+}
+#endif
 //! Локальные данные
 const char *ap_ssid = "LedControl";
 String st_ssid;
@@ -29,25 +33,17 @@ bool is_st_mode = false;
 void get_wifi_from_eeprom()
 {
   EEPROM.begin(EEPROM_SIZE);
+  st_ssid = "";
+  st_password = "";
   INFO("Get SSID from eeprom");
   for(int i = 0; i < 32; i++)
   {
     if (EEPROM.read(WIFI_SSID + i) == 255)
     {
-      st_ssid += "";
-      if (i < 5)
-      {
-        is_st_mode = false;
-        is_at_mode = true;
-      }
-      else
-      {
-        is_st_mode = true;
-        is_at_mode = false;
-      }
+      //st_ssid += "";
       break;
     }
-    st_ssid += String(EEPROM.read(WIFI_SSID + i));
+    st_ssid += String((char)EEPROM.read(WIFI_SSID + i));
   }
   INFO(st_ssid);
 
@@ -56,10 +52,10 @@ void get_wifi_from_eeprom()
   {
     if (EEPROM.read(WIFI_PASSWORD + i) == 255)
     {
-      st_password += "";
+      //st_password += "";
       break;
     }
-    st_password += EEPROM.read(WIFI_PASSWORD + i);
+    st_password += String((char)EEPROM.read(WIFI_PASSWORD + i));
   }
   INFO(String(st_password));
   if (st_ssid.length() < 5 && st_password.length() < 5)
@@ -74,6 +70,30 @@ void get_wifi_from_eeprom()
   }
   
   EEPROM.end();
+}
+
+void wifi_event_handler_cb(System_Event_t * event)
+{
+  EEPROM.begin(EEPROM_SIZE);   
+    switch (event->event)
+    {
+        case EVENT_STAMODE_CONNECTED:
+            break;
+        case EVENT_STAMODE_DISCONNECTED:
+          for(int i = 0; i < 32; i++)
+          {
+            EEPROM.write(WIFI_SSID + i, 255);
+          }
+            break;
+        case EVENT_STAMODE_AUTHMODE_CHANGE:
+            break;
+        case EVENT_STAMODE_GOT_IP:
+            break;
+        case EVENT_SOFTAPMODE_STACONNECTED:
+        case EVENT_SOFTAPMODE_STADISCONNECTED:
+            break;
+    }
+    EEPROM.end();
 }
 
 //! Глобальные функции
@@ -91,7 +111,7 @@ void init_wifi()
   if (is_st_mode)
   {
     INFO("Connecting to ");
-    INFO(String(ap_ssid));
+    INFO(String(st_ssid));
   
     WiFi.begin(st_ssid.c_str(), st_password.c_str());
     while (WiFi.status() != WL_CONNECTED) 
@@ -100,6 +120,7 @@ void init_wifi()
       Serial.print(".");
     }
     INFO("WiFi connected");
+    wifi_set_event_handler_cb(wifi_event_handler_cb);
     INFO(WiFi.localIP());
   }
 }

@@ -29,7 +29,7 @@
 #define LED_1_NUMBER_PIXELS      16
 #define LED_2_NUMBER_PIXELS      16
 #define LED_3_NUMBER_PIXELS      16
-#define LED_4_NUMBER_PIXELS      16
+#define LED_4_NUMBER_PIXELS      5
 
 #define LED_1_ADDRESS_START    0
 #define LED_2_ADDRESS_START    96

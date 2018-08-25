@@ -146,6 +146,8 @@ void handle_set_wifi()
   String password = server.arg("password");
   set_wifi_data(ssid, password);
   server.send(200, "text/html", main_page);
+  delay(200);
+  ESP.deepSleep(1000, WAKE_RF_DEFAULT);
 }
 
 void handle_set_delay()
