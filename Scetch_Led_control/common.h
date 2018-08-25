@@ -28,7 +28,7 @@ typedef enum
 
 //! Макроопределения
 #define HTTP_SERVER_PORT    80
-#define IS_AP_MODE          true
+#define IS_AP_MODE          false
 #define IS_CLIENT_MODE      !IS_AP_MODE
 
 #define INFO(a)     print_log(a, INFO);

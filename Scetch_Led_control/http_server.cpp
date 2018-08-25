@@ -14,8 +14,8 @@
 #include "http_server.h"
 
 //! Локальные данные
-const char *ap_ssid = "Led_control";
-const char *ap_password = "your-password";
+const char *ap_ssid = "ASUS_Home";
+const char *ap_password = "1300703DronVip";
 ESP8266WebServer server(80);
 
 String main_page = "<!DOCTYPE html>" \
@@ -124,7 +124,6 @@ void handle_set_color_4()
   col = "0x" + String(color_str.c_str()[5]) + String(color_str.c_str()[6]);
   int blue = strtol(col.c_str(),NULL,0);
   INFO("Получен цвет");
-  INFO(col);
   INFO(String(red) + String(" ") + String(green) + String(" ") + String(blue));
   set_leds_colors(LED_4, red, green, blue);
   set_brightness(LED_4, server.arg("brightness").toInt());

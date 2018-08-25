@@ -251,7 +251,7 @@ void update_leds_colors(led_id_t led_id)
       {
         for (int i = 0; i < LED_4_NUMBER_PIXELS; i++)
         {
-          INFO("Установка свеодиода " + String(i) + String(" ленты №4 цвета: ") + String(led_4_colors[i][RED_COLOR]) + String(led_4_colors[i][GREEN_COLOR]) + String(led_4_colors[i][BLUE_COLOR]));
+          INFO("Установка свеодиода " + String(i) + String(" ленты №4 цвета: ") + String(led_4_colors[i][RED_COLOR]) + String("-") + String(led_4_colors[i][GREEN_COLOR]) + String("-") + String(led_4_colors[i][BLUE_COLOR]));
           led_pixels_4.setPixelColor(i, led_pixels_4.Color(led_1_colors[i][RED_COLOR], led_4_colors[i][GREEN_COLOR], led_4_colors[i][BLUE_COLOR]));
           led_pixels_4.setBrightness(led_4_brightness);
           led_pixels_4.show();
