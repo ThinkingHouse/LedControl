@@ -20,14 +20,14 @@ Adafruit_NeoPixel led_pixels_2 = Adafruit_NeoPixel(LED_2_NUMBER_PIXELS, LED_IN_P
 Adafruit_NeoPixel led_pixels_3 = Adafruit_NeoPixel(LED_3_NUMBER_PIXELS, LED_IN_PIN_3, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel led_pixels_4 = Adafruit_NeoPixel(LED_4_NUMBER_PIXELS, LED_IN_PIN_4, NEO_GRB + NEO_KHZ800);
 
-int8_t led_1_colors[LED_1_NUMBER_PIXELS][3];
-int8_t led_2_colors[LED_2_NUMBER_PIXELS][3];
-int8_t led_3_colors[LED_3_NUMBER_PIXELS][3];
-int8_t led_4_colors[LED_4_NUMBER_PIXELS][3];
-int8_t led_1_brightness = 255;
-int8_t led_2_brightness = 255;
-int8_t led_3_brightness = 255;
-int8_t led_4_brightness = 255;
+int16_t led_1_colors[LED_1_NUMBER_PIXELS][3];
+int16_t led_2_colors[LED_2_NUMBER_PIXELS][3];
+int16_t led_3_colors[LED_3_NUMBER_PIXELS][3];
+int16_t led_4_colors[LED_4_NUMBER_PIXELS][3];
+int16_t led_1_brightness = 255;
+int16_t led_2_brightness = 255;
+int16_t led_3_brightness = 255;
+int16_t led_4_brightness = 255;
 
 int8_t led_4_programm = 0;
 int8_t programm_head = 0;
@@ -44,7 +44,7 @@ void init_leds()
 {
   int address_cursor = 0;
   
-  EEPROM.begin(512);
+  EEPROM.begin(EEPROM_SIZE);
   led_pixels_1.begin();
   led_pixels_2.begin();
   led_pixels_3.begin();
@@ -104,10 +104,10 @@ void init_leds()
   INFO("Инициализация светодиодных лент завершена");
 }
 
-void set_leds_colors(led_id_t led_id, int8_t red, int8_t green, int8_t blue)
+void set_leds_colors(led_id_t led_id, int16_t red, int16_t green, int16_t blue)
 {
   int address_cursor = 0;
-  EEPROM.begin(512);
+  EEPROM.begin(EEPROM_SIZE);
   switch(led_id)
   {
     case LED_1:
@@ -173,9 +173,9 @@ void set_leds_colors(led_id_t led_id, int8_t red, int8_t green, int8_t blue)
   EEPROM.end();
 }
 
-void set_brightness(led_id_t led_id, int8_t value)
+void set_brightness(led_id_t led_id, int16_t value)
 {
-  EEPROM.begin(512);
+  EEPROM.begin(EEPROM_SIZE);
   switch(led_id)
   {
     case LED_1:
@@ -203,7 +203,7 @@ void set_brightness(led_id_t led_id, int8_t value)
 
 void set_programm(int8_t value)
 {
-  EEPROM.begin(512);
+  EEPROM.begin(EEPROM_SIZE);
   led_4_programm = value;
   EEPROM.write(LED_4_PROGRAMM, value);
   EEPROM.end();
@@ -251,7 +251,7 @@ void update_leds_colors(led_id_t led_id)
       {
         for (int i = 0; i < LED_4_NUMBER_PIXELS; i++)
         {
-          INFO("Установка свеодиода " + String(i) + String(" ленты №4 цвета: ") + String(led_4_colors[i][RED_COLOR]) + String("-") + String(led_4_colors[i][GREEN_COLOR]) + String("-") + String(led_4_colors[i][BLUE_COLOR]));
+          INFO("Установка свеодиода " + String(i) + String(" ленты №4 цвета: ") + String(led_4_colors[i][RED_COLOR]) + String("|") + String(led_4_colors[i][GREEN_COLOR]) + String("|") + String(led_4_colors[i][BLUE_COLOR]));
           led_pixels_4.setPixelColor(i, led_pixels_4.Color(led_1_colors[i][RED_COLOR], led_4_colors[i][GREEN_COLOR], led_4_colors[i][BLUE_COLOR]));
           led_pixels_4.setBrightness(led_4_brightness);
           led_pixels_4.show();

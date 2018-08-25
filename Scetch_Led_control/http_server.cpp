@@ -39,6 +39,14 @@ String main_page = "<!DOCTYPE html>" \
                    "    <p>Укажите цвет ленты 4: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\"> Программа: <input type=\"text\" name=\"programm\" value=\"0\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
+                   "  <form action=\"set_wifi\">" \
+                   "    <p>Данные WiFi: SSID: <input type=\"text\" name=\"ssid\" value=\"\"> Пароль: <input type=\"text\" name=\"password\" value=\"\">" \
+                   "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
+                   "   </form>" \
+                   "  <form action=\"set_delay\">" \
+                   "    <p>Плавность: <input type=\"text\" name=\"delay\" value=\"\">" \
+                   "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
+                   "   </form>" \
                    "</body>" \ 
                    " </html>";
 
@@ -130,6 +138,25 @@ void handle_set_color_4()
   server.send(200, "text/html", main_page);
 }
 
+void handle_set_wifi()
+{
+  INFO("Получен запрос от клиента");
+  INFO(server.uri());
+  String ssid = server.arg("ssid");
+  String password = server.arg("password");
+  set_wifi_data(ssid, password);
+  server.send(200, "text/html", main_page);
+}
+
+void handle_set_delay()
+{
+  INFO("Получен запрос от клиента");
+  INFO(server.uri());
+  String delay_str = server.arg("delay");
+  set_main_delay(delay_str);
+  server.send(200, "text/html", main_page);
+}
+
 void handleNotFound()
 {
   String message = "File Not Found\n\n";
@@ -155,6 +182,8 @@ void init_server()
   server.on("/set_color_2", handle_set_color_2);
   server.on("/set_color_3", handle_set_color_3);
   server.on("/set_color_4", handle_set_color_4);
+  server.on("/set_wifi", handle_set_wifi);
+  server.on("/set_delay", handle_set_delay);
   server.onNotFound(handleNotFound);
   server.begin();
   INFO("HTTP сервер запущен");

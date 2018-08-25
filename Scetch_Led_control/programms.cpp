@@ -30,6 +30,12 @@ int8_t programm_5[5][4] = { {61,   242,   4,   63},
                             {153, 255, 11,  235},
                             {255,  232,  1,   5} };
 
+int8_t programm_6[5][4] = { {64,   242,   4,   63},   
+                            { 128,  242,   4,   63},  
+                            {254,  242,  4,   63},  
+                            {128, 242, 4,  63},
+                            {64,  242,  4,   63} };
+
 int8_t get_programm(int8_t programm, int8_t x, int8_t y)
 {
   switch(programm)
@@ -48,6 +54,9 @@ int8_t get_programm(int8_t programm, int8_t x, int8_t y)
 
     case 5:
       return programm_5[x][y];
+
+    case 6:
+      return programm_6[x][y];
 
     default:
       return 255;

@@ -14,15 +14,19 @@
 
 //! Подключение заголовочных файлов
 #include "common.h"
+#include <EEPROM.h>
 
 //! Глобальные данные
 
 //! Макроопределения
+
 //! Типы
 
 //! Глобальные данные
 
 //! Глобальные функции
 void init_wifi(void);
+
+void set_wifi_data(String ssid, String password);
 
 #endif

@@ -29,7 +29,7 @@
 #define LED_1_NUMBER_PIXELS      16
 #define LED_2_NUMBER_PIXELS      16
 #define LED_3_NUMBER_PIXELS      16
-#define LED_4_NUMBER_PIXELS      5
+#define LED_4_NUMBER_PIXELS      16
 
 #define LED_1_ADDRESS_START    0
 #define LED_2_ADDRESS_START    96
@@ -68,7 +68,7 @@ void init_leds(void);
  *  \param         blue   - Значение синего цвета
  *  
  */
-void set_leds_colors(led_id_t led_id, int8_t red, int8_t green, int8_t blue);
+void set_leds_colors(led_id_t led_id, int16_t red, int16_t green, int16_t blue);
 
 /*!
  *  \brief         Задать интенсивность светодода на ленте 
@@ -77,7 +77,7 @@ void set_leds_colors(led_id_t led_id, int8_t red, int8_t green, int8_t blue);
  *  \param         value  - Значение 
  *  
  */
-void set_brightness(led_id_t led_id, int8_t value);
+void set_brightness(led_id_t led_id, int16_t value);
 
 /*!
  *  \brief         Задать программу светодода на ленте 
