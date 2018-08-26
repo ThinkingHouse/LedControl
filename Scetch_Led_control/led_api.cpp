@@ -38,6 +38,34 @@ int8_t programm_head = 0;
 #define BLUE_COLOR   2
 
 //! Локальные функции
+uint32_t Wheel(byte WheelPos) {
+  WheelPos = 255 - WheelPos;
+  if(WheelPos < 85) {
+    return led_pixels_4.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  }
+  if(WheelPos < 170) {
+    WheelPos -= 85;
+    return led_pixels_4.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  }
+  WheelPos -= 170;
+  return led_pixels_4.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+}
+
+void rainbow(uint8_t wait) 
+{
+  uint16_t i, j;
+
+  for(j=0; j<256; j++) 
+  {
+    for(i=0; i<led_pixels_4.numPixels(); i++) 
+    {
+      led_pixels_4.setPixelColor(i, Wheel((i+j) & 255));
+    }
+    led_pixels_4.show();
+    delay(wait);
+  }
+}
+
 
 //! Глобальные функции
 void init_leds()
@@ -267,6 +295,12 @@ void do_programm()
   int8_t led_i = 0;
   if (led_4_programm == 0)
   {
+    return;
+  }
+
+  if (led_4_programm == 7)
+  {
+    rainbow(5);
     return;
   }
 

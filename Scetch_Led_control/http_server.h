@@ -5,7 +5,7 @@
  *
  *  \detailed   
  *
- *  \author    Андрей Алексеев <andrey@thinking-house.ru
+ *  \author    Андрей Алексеев <andrey@thinking-house.ru>
  *
  *  \copyright Лаборатория Умного Дома (ИП Алексеев А.П.), 2018. Все права защищены.
  */
