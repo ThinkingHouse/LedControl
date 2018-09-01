@@ -24,15 +24,15 @@ String main_page = "<!DOCTYPE html>" \
                    "</head>" \
                    "<body>" \   
                    "  <form action=\"set_color_1\">" \
-                   "    <p>Укажите цвет ленты 1: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\">" \
+                   "    <p>Укажите цвет ленты 1: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\"> Программа: <input type=\"text\" name=\"programm\" value=\"0\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \ 
                    "  <form action=\"set_color_2\">" \
-                   "    <p>Укажите цвет ленты 2: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\">" \
+                   "    <p>Укажите цвет ленты 2: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\"> Программа: <input type=\"text\" name=\"programm\" value=\"0\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
-                    "  <form action=\"set_color_3\">" \
-                   "    <p>Укажите цвет ленты 3: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\">" \
+                   "  <form action=\"set_color_3\">" \
+                   "    <p>Укажите цвет ленты 3: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\"> Программа: <input type=\"text\" name=\"programm\" value=\"0\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
                    "  <form action=\"set_color_4\">" \

@@ -29,6 +29,9 @@ int16_t led_2_brightness = 255;
 int16_t led_3_brightness = 255;
 int16_t led_4_brightness = 255;
 
+int8_t led_1_programm = 0;
+int8_t led_2_programm = 0;
+int8_t led_3_programm = 0;
 int8_t led_4_programm = 0;
 int8_t programm_head = 0;
 
