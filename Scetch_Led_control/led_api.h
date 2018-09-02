@@ -15,16 +15,16 @@
 
 //! Подключение заголовочных файлов
 #include "common.h"
-#include <Adafruit_NeoPixel.h>
+#include <FastLED.h>
 #include <EEPROM.h>
 
 //! Глобальные данные
 
 //! Макроопределения
-#define LED_IN_PIN_1    D6
-#define LED_IN_PIN_2    D1
-#define LED_IN_PIN_3    D2
-#define LED_IN_PIN_4    D3
+#define LED_IN_PIN_1    6
+#define LED_IN_PIN_2    1
+#define LED_IN_PIN_3    2
+#define LED_IN_PIN_4    3
 
 #define LED_1_NUMBER_PIXELS      16
 #define LED_2_NUMBER_PIXELS      16
@@ -41,7 +41,10 @@
 #define LED_3_BRIGHTNESS       302
 #define LED_4_BRIGHTNESS       303
 
-#define LED_4_PROGRAMM         304
+#define LED_1_PROGRAMM         304
+#define LED_2_PROGRAMM         305
+#define LED_3_PROGRAMM         306
+#define LED_4_PROGRAMM         307
 
 //! Типы
 typedef enum
@@ -100,6 +103,6 @@ void update_leds_colors(led_id_t led_id);
  *  \brief         Выполнить программу
  *  
  */
-void do_programm(void);
+void do_programm();
 
 #endif
