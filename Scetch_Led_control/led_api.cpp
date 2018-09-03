@@ -21,9 +21,9 @@
 #define UPDATES_PER_SECOND 100
 
 //! Локальные данные
-CFastLED led_pixels_1;
-CFastLED led_pixels_2;
-CFastLED led_pixels_3;
+Adafruit_NeoPixel led_pixels_1 = Adafruit_NeoPixel(LED_1_NUMBER_PIXELS, LED_IN_PIN_1, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel led_pixels_2 = Adafruit_NeoPixel(LED_2_NUMBER_PIXELS, LED_IN_PIN_2, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel led_pixels_3 = Adafruit_NeoPixel(LED_3_NUMBER_PIXELS, LED_IN_PIN_3, NEO_GRB + NEO_KHZ800);
 CFastLED led_pixels_4;
 
 CRGB leds_1[LED_1_NUMBER_PIXELS];
@@ -46,15 +46,24 @@ int8_t led_3_programm = 0;
 int8_t led_4_programm = 0;
 int8_t programm_head = 0;
 
+//extern TProgmemRGBGradientPalettePtr gGradientPalettes[1];
+//extern uint8_t gGradientPaletteCount;
+//
+//// Current palette number from the 'playlist' of color palettes
+//uint8_t gCurrentPaletteNumber = 0;
+//
+//CRGBPalette16 gCurrentPalette( CRGB::Black);
+//CRGBPalette16 gTargetPalette( gGradientPalettes[0] );
+
 //! Локальные Макроопределения
 #define RED_COLOR    0
 #define GREEN_COLOR  1
 #define BLUE_COLOR   2
 
 //! Локальные функции
-CFastLED get_leds(led_id_t led_id)
+Adafruit_NeoPixel get_leds(led_id_t led_id)
 {
-  CFastLED result;
+  Adafruit_NeoPixel result;
   
   switch(led_id)
   {
@@ -63,15 +72,11 @@ CFastLED get_leds(led_id_t led_id)
       break;
 
     case LED_2:
-      result = led_pixels_1;
+      result = led_pixels_2;
       break;
 
     case LED_3:
-      result = led_pixels_1;
-      break;
-
-    case LED_4:
-      result = led_pixels_1;
+      result = led_pixels_3;
       break;
   }
   return result;
@@ -130,7 +135,8 @@ void colorwaves( CRGB* ledarray, uint16_t numleds, CRGBPalette16& palette)
   }
 }
 
-CRGB Wheel(byte WheelPos) {
+CRGB Wheel_led_4(byte WheelPos) 
+{
   WheelPos = 255 - WheelPos;
   if(WheelPos < 85) {
     return CRGB(255 - WheelPos * 3, 0, WheelPos * 3);
@@ -143,35 +149,28 @@ CRGB Wheel(byte WheelPos) {
   return CRGB(WheelPos * 3, 255 - WheelPos * 3, 0);
 }
 
-void rainbow(uint8_t wait, CFastLED leds_class, led_id_t led_id, int led_num) 
+void rainbow_led_4() 
 {
   uint16_t i, j;
-
+  
   for(j=0; j<256; j++) 
   {
-    for(i=0; i<led_num; i++) 
+    for(i=0; i<LED_4_NUMBER_PIXELS; i++) 
     {
-      if (led_id == LED_1)
-        leds_1[i] = Wheel((i+j) & 255);
-      else if (led_id == LED_2)
-        leds_2[i] = Wheel((i+j) & 255);
-      else if (led_id == LED_3)
-        leds_3[i] = Wheel((i+j) & 255);
-      else if (led_id == LED_4)
-        leds_4[i] = Wheel((i+j) & 255);
+        leds_4[i] = Wheel_led_4((i+j) & 255);
     }
-    leds_class.show();
-    delay(wait);
+    led_pixels_4.show();
+    delay(20);
   }
 }
 
-void fire_programm(CFastLED leds_class, led_id_t led_id, int led_num) 
+void fire_programm_led_4() 
 {
   int r = 255;
   int g = 96;
   int b = 12;
   
-  for(int x = 0; x <led_num; x++)
+  for(int x = 0; x <LED_4_NUMBER_PIXELS; x++)
   {
     int flicker = random(0,60);
     int r1 = r-flicker;
@@ -180,32 +179,75 @@ void fire_programm(CFastLED leds_class, led_id_t led_id, int led_num)
     if(g1<0) g1=0;
     if(r1<0) r1=0;
     if(b1<0) b1=0;
-    if (led_id == LED_1)
-      leds_1[x] = CRGB(r1, g1, b1);
-    else if (led_id == LED_2)
-      leds_2[x] = CRGB(r1, g1, b1);
-    else if (led_id == LED_3)
-      leds_3[x] = CRGB(r1, g1, b1);
-    else if (led_id == LED_4)
-      leds_4[x] = CRGB(r1, g1, b1);
+    leds_4[x] = CRGB(r1, g1, b1);
   }
-  leds_class.show();
+  led_pixels_4.show();
   delay(random(60,150));
 }
 
+uint32_t Wheel(byte WheelPos, led_id_t led_id) 
+{
+  Adafruit_NeoPixel led_pixels = get_leds(led_id);
+  WheelPos = 255 - WheelPos;
+  if(WheelPos < 85) 
+  {
+    return led_pixels.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  }
+  if(WheelPos < 170) 
+  {
+    WheelPos -= 85;
+    return led_pixels.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  }
+  WheelPos -= 170;
+  return led_pixels.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+}
+
+void rainbow(uint8_t wait, led_id_t led_id) 
+{
+  uint16_t i, j;
+  Adafruit_NeoPixel led_pixels = get_leds(led_id);
+  for(j=0; j<256; j++) 
+  {
+    for(i=0; i<led_pixels.numPixels(); i++) 
+    {
+      led_pixels.setPixelColor(i, Wheel((i+j) & 255, led_id));
+    }
+    led_pixels.show();
+    delay(wait);
+  }
+}
+
+void fire_programm(led_id_t led_id) 
+{
+  int r = 255;
+  int g = 96;
+  int b = 12;
+  Adafruit_NeoPixel led_pixels = get_leds(led_id);
+  
+  for(int x = 0; x <LED_1_NUMBER_PIXELS; x++)
+  {
+    int flicker = random(0,60);
+    int r1 = r-flicker;
+    int g1 = g-flicker;
+    int b1 = b-flicker;
+    if(g1<0) g1=0;
+    if(r1<0) r1=0;
+    if(b1<0) b1=0;
+    led_pixels.setPixelColor(x, led_pixels_3.Color(r1, g1, b1));
+  }
+  led_pixels.show();
+  delay(random(60,150));
+}
 
 //! Глобальные функции
 void init_leds()
 {
   int address_cursor = 0;
-  
+  led_pixels_1.begin();
+  led_pixels_2.begin();
+  led_pixels_3.begin();
+  led_pixels_4 = CFastLED();
   EEPROM.begin(EEPROM_SIZE);
-  led_pixels_1.addLeds<CHIPSET, LED_IN_PIN_1, COLOR_ORDER>(leds_1, LED_1_NUMBER_PIXELS).setCorrection( TypicalLEDStrip );
-  led_pixels_1.setBrightness( BRIGHTNESS );
-  led_pixels_2.addLeds<CHIPSET, LED_IN_PIN_2, COLOR_ORDER>(leds_2, LED_2_NUMBER_PIXELS).setCorrection( TypicalLEDStrip );
-  led_pixels_2.setBrightness( BRIGHTNESS );
-  led_pixels_3.addLeds<CHIPSET, LED_IN_PIN_3, COLOR_ORDER>(leds_3, LED_3_NUMBER_PIXELS).setCorrection( TypicalLEDStrip );
-  led_pixels_3.setBrightness( BRIGHTNESS );
   led_pixels_4.addLeds<CHIPSET, LED_IN_PIN_4, COLOR_ORDER>(leds_4, LED_4_NUMBER_PIXELS).setCorrection( TypicalLEDStrip );
   led_pixels_4.setBrightness( BRIGHTNESS );
   for (int i = 0; i < LED_1_NUMBER_PIXELS; i++)
@@ -258,9 +300,9 @@ void init_leds()
   update_leds_colors(LED_3);
   update_leds_colors(LED_4);
 
-  led_1_programm = 0;//EEPROM.read(LED_1_PROGRAMM);
-  led_2_programm = 0;//EEPROM.read(LED_2_PROGRAMM);
-  led_3_programm = 0;//EEPROM.read(LED_3_PROGRAMM);
+  led_1_programm = EEPROM.read(LED_1_PROGRAMM);
+  led_2_programm = EEPROM.read(LED_2_PROGRAMM);
+  led_3_programm = EEPROM.read(LED_3_PROGRAMM);
   led_4_programm = EEPROM.read(LED_4_PROGRAMM);
   EEPROM.end();
   INFO("Инициализация светодиодных лент завершена");
@@ -363,11 +405,55 @@ void set_brightness(led_id_t led_id, int16_t value)
   EEPROM.end();
 }
 
-void set_programm(int8_t value)
+void set_programm(led_id_t led_id, int8_t value)
 {
   EEPROM.begin(EEPROM_SIZE);
-  led_4_programm = value;
-  EEPROM.write(LED_4_PROGRAMM, value);
+  switch(led_id)
+  {
+    case LED_1:
+      led_1_programm = value;
+      led_2_programm = 0;
+      led_3_programm = 0;
+      led_4_programm = 0;
+      EEPROM.write(LED_1_PROGRAMM, value);
+      EEPROM.write(LED_2_PROGRAMM, value);
+      EEPROM.write(LED_3_PROGRAMM, value);
+      EEPROM.write(LED_4_PROGRAMM, value);
+      break;
+
+    case LED_2:
+      led_1_programm = 0;
+      led_2_programm = value;
+      led_3_programm = 0;
+      led_4_programm = 0;
+      EEPROM.write(LED_1_PROGRAMM, value);
+      EEPROM.write(LED_2_PROGRAMM, value);
+      EEPROM.write(LED_3_PROGRAMM, value);
+      EEPROM.write(LED_4_PROGRAMM, value);
+      break;
+
+    case LED_3:
+      led_1_programm = 0;
+      led_2_programm = 0;
+      led_3_programm = value;
+      led_4_programm = 0;
+      EEPROM.write(LED_1_PROGRAMM, 0);
+      EEPROM.write(LED_2_PROGRAMM, 0);
+      EEPROM.write(LED_3_PROGRAMM, value);
+      EEPROM.write(LED_4_PROGRAMM, 0);
+      break;
+
+    case LED_4:
+      led_1_programm = 0;
+      led_2_programm = 0;
+      led_3_programm = 0;
+      led_4_programm = value;
+      EEPROM.write(LED_1_PROGRAMM, 0);
+      EEPROM.write(LED_2_PROGRAMM, 0);
+      EEPROM.write(LED_3_PROGRAMM, 0);
+      EEPROM.write(LED_4_PROGRAMM, value);
+      break;
+  }
   EEPROM.end();
 }
 
@@ -379,27 +465,30 @@ void update_leds_colors(led_id_t led_id)
       for (int i = 0; i < LED_1_NUMBER_PIXELS; i++)
       {
         INFO("Установка свеодиода " + String(i) + String(" ленты №1 цвета: ") + String(led_1_colors[i][RED_COLOR])  + String("|") +  String(led_1_colors[i][GREEN_COLOR])  + String("|") +  String(led_1_colors[i][BLUE_COLOR]));
-        led_pixels_1.showColor(CRGB(led_1_colors[i][RED_COLOR], led_1_colors[i][GREEN_COLOR], led_1_colors[i][BLUE_COLOR]), led_1_brightness);
+        led_pixels_1.setPixelColor(i, led_pixels_1.Color(led_1_colors[i][RED_COLOR], led_1_colors[i][GREEN_COLOR], led_1_colors[i][BLUE_COLOR], led_1_brightness));
         delay(1);
       }
+      led_pixels_1.show();
       break;
 
     case LED_2:
       for (int i = 0; i < LED_2_NUMBER_PIXELS; i++)
       {
         INFO("Установка свеодиода " + String(i) + String(" ленты №2 цвета: ") + String(led_2_colors[i][RED_COLOR])  + String("|") +  String(led_2_colors[i][GREEN_COLOR])  + String("|") +  String(led_2_colors[i][BLUE_COLOR]));
-        led_pixels_2.showColor(CRGB(led_2_colors[i][RED_COLOR], led_2_colors[i][GREEN_COLOR], led_2_colors[i][BLUE_COLOR]), led_2_brightness);
+        led_pixels_2.setPixelColor(i, led_pixels_2.Color(led_2_colors[i][RED_COLOR], led_2_colors[i][GREEN_COLOR], led_2_colors[i][BLUE_COLOR], led_2_brightness));
         delay(1);
       }
+      led_pixels_2.show();
       break;
 
     case LED_3:
       for (int i = 0; i < LED_3_NUMBER_PIXELS; i++)
       {
         INFO("Установка свеодиода " + String(i) + String(" ленты №3 цвета: ") + String(led_3_colors[i][RED_COLOR])  + String("|") +  String(led_3_colors[i][GREEN_COLOR])  + String("|") +  String(led_3_colors[i][BLUE_COLOR]));
-        led_pixels_3.showColor(CRGB(led_3_colors[i][RED_COLOR], led_3_colors[i][GREEN_COLOR], led_3_colors[i][BLUE_COLOR]), led_3_brightness);
+        led_pixels_3.setPixelColor(i, led_pixels_3.Color(led_3_colors[i][RED_COLOR], led_3_colors[i][GREEN_COLOR], led_2_colors[i][BLUE_COLOR], led_3_brightness));
         delay(1);
       }
+      led_pixels_3.show();
       break;
 
     case LED_4:
@@ -416,65 +505,79 @@ void update_leds_colors(led_id_t led_id)
   }
 }
 
-void do_programm()
+void do_programm_led_4()
 {
   int8_t led_i = 0;
   int8_t programm = 0;
   int8_t leds_num = 0;
-  CFastLED leds_class;
-  led_id_t led_id;
-  if (led_1_programm == 0 && led_2_programm == 0 && led_3_programm == 0 && led_4_programm == 0)
+  if (led_4_programm == 0)
   {
     return;
   }
   
-  if (led_1_programm != 0)
-  {
-    leds_class = get_leds(LED_1);
-    programm = led_1_programm;
-    leds_num = LED_1_NUMBER_PIXELS;
-    led_id = LED_1;
-  }
-  else if (led_2_programm != 0)
-  {
-    leds_class = get_leds(LED_2);
-    programm = led_2_programm;
-    leds_num = LED_2_NUMBER_PIXELS;
-    led_id = LED_2;
-  }
-  else if (led_3_programm != 0)
-  {
-    leds_class = get_leds(LED_3);
-    programm = led_3_programm;
-    leds_num = LED_3_NUMBER_PIXELS;
-    led_id = LED_3;
-  }
-  else if (led_4_programm != 0)
-  {
-    leds_class = get_leds(LED_4);
-    programm = led_4_programm;
-    leds_num = LED_4_NUMBER_PIXELS;
-    led_id = LED_4;
-  }
-  else
-  {
-    return;
-  }
-
   DEBUG("Выполняем программу");
-  DEBUG(programm);
-  switch(programm)
+  DEBUG(led_4_programm);
+  switch(led_4_programm)
   {
     case 1: //FIRE
-      fire_programm(leds_class, led_id, leds_num);
+      fire_programm_led_4();
       break;
 
     case 2:
-      rainbow(20, leds_class, led_id, leds_num);
+      rainbow_led_4();
       break;
 
     default:
       break;
+  }
+      //colorwaves( leds_4, LED_4_NUMBER_PIXELS, gCurrentPalette);
+
+    //led_pixels_4.show();
+    //led_pixels_4.delay(20);
+}
+
+void do_programm()
+{
+  int programm = 0;
+  led_id_t led_id = LED_1;
+  if (led_1_programm == 0 && led_2_programm == 0 && led_3_programm == 0 && led_4_programm != 0)
+  {
+    do_programm_led_4();
+  }
+  else
+  {
+    if (led_1_programm != 0)
+    {
+      programm = led_1_programm;
+      led_id = LED_1;
+    }
+    else if (led_2_programm != 0)
+    {
+      programm = led_2_programm;
+      led_id = LED_2;
+    }
+    else if (led_3_programm != 0)
+    {
+      programm = led_3_programm;
+      led_id = LED_3;
+    }
+    else
+    {
+      return;
+    }
+    switch(programm)
+    {
+      case 1: //FIRE
+        fire_programm(led_id);
+        break;
+  
+      case 2:
+        rainbow(25, led_id);
+        break;
+  
+      default:
+        break;
+    }
   }
 }
 
@@ -482,17 +585,17 @@ void do_programm()
 //    956 bytes of PROGMEM for all of the palettes together,
 //   +618 bytes of PROGMEM for gradient palette code (AVR).
 //  1,494 bytes total for all 34 color palettes and associated code.
-
 // Gradient palette "ib_jul01_gp", originally from
 // http://soliton.vm.bytemark.co.uk/pub/cpt-city/ing/xmas/tn/ib_jul01.png.index.html
 // converted for FastLED with gammas (2.6, 2.2, 2.5)
 // Size: 16 bytes of program space.
 
-DEFINE_GRADIENT_PALETTE( ib_jul01_gp ) {
+DEFINE_GRADIENT_PALETTE( ib_jul01_gp ) {  // 1
     0, 194,  1,  1,
    94,   1, 29, 18,
   132,  57,131, 28,
   255, 113,  1,  1};
+
 
 // Gradient palette "es_vintage_57_gp", originally from
 // http://soliton.vm.bytemark.co.uk/pub/cpt-city/es/vintage/tn/es_vintage_57.png.index.html
@@ -947,23 +1050,4 @@ DEFINE_GRADIENT_PALETTE( fire ) {
     255,   0,  0,255,
    255,   128, 0,255,
   255,   255,0,255};
-
-
-// Single array of defined cpt-city color palettes.
-// This will let us programmatically choose one based on
-// a number, rather than having to activate each explicitly 
-// by name every time.
-// Since it is const, this array could also be moved 
-// into PROGMEM to save SRAM, but for simplicity of illustration
-// we'll keep it in a regular SRAM array.
-//
-// This list of color palettes acts as a "playlist"; you can
-// add or delete, or re-arrange as you wish.
-const TProgmemRGBGradientPalettePtr gGradientPalettes[] = {
-  BlacK_Red_Magenta_Yellow_gp};
-
-
-// Count of how many cpt-city gradients are defined:
-const uint8_t gGradientPaletteCount = 
-  sizeof( gGradientPalettes) / sizeof( TProgmemRGBGradientPalettePtr );
 

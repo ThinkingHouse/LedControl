@@ -74,6 +74,7 @@ void handle_set_color_1()
   INFO(String(red) + String(" ") + String(green) + String(" ") + String(blue));
   set_leds_colors(LED_1, red, green, blue);
   set_brightness(LED_1, server.arg("brightness").toInt());
+  set_programm(LED_1, server.arg("programm").toInt());
   update_leds_colors(LED_1);
   server.send(200, "text/html", main_page);
 }
@@ -94,6 +95,7 @@ void handle_set_color_2()
   INFO(String(red) + String(" ") + String(green) + String(" ") + String(blue));
   set_leds_colors(LED_2, red, green, blue);
   set_brightness(LED_2, server.arg("brightness").toInt());
+  set_programm(LED_2, server.arg("programm").toInt());
   update_leds_colors(LED_2);
   server.send(200, "text/html", main_page);
 }
@@ -114,6 +116,7 @@ void handle_set_color_3()
   INFO(String(red) + String(" ") + String(green) + String(" ") + String(blue));
   set_leds_colors(LED_3, red, green, blue);
   set_brightness(LED_3, server.arg("brightness").toInt());
+  set_programm(LED_3, server.arg("programm").toInt());
   update_leds_colors(LED_3);
   server.send(200, "text/html", main_page);
 }
@@ -133,7 +136,7 @@ void handle_set_color_4()
   INFO(String(red) + String(" ") + String(green) + String(" ") + String(blue));
   set_leds_colors(LED_4, red, green, blue);
   set_brightness(LED_4, server.arg("brightness").toInt());
-  set_programm(server.arg("programm").toInt());
+  set_programm(LED_4, server.arg("programm").toInt());
   update_leds_colors(LED_4);
   server.send(200, "text/html", main_page);
 }

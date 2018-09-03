@@ -16,14 +16,15 @@
 //! Подключение заголовочных файлов
 #include "common.h"
 #include <FastLED.h>
+#include <Adafruit_NeoPixel.h>
 #include <EEPROM.h>
 
 //! Глобальные данные
 
 //! Макроопределения
-#define LED_IN_PIN_1    6
-#define LED_IN_PIN_2    1
-#define LED_IN_PIN_3    2
+#define LED_IN_PIN_1    D6
+#define LED_IN_PIN_2    D1
+#define LED_IN_PIN_3    D2
 #define LED_IN_PIN_4    3
 
 #define LED_1_NUMBER_PIXELS      16
@@ -89,7 +90,7 @@ void set_brightness(led_id_t led_id, int16_t value);
  *  \param         value  - Значение 
  *  
  */
-void set_programm(int8_t value);
+void set_programm(led_id_t led_id, int8_t value);
 
 /*!
  *  \brief         Обновить цвет светодода на ленте 

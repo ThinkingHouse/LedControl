@@ -26,6 +26,7 @@ bool is_at_mode = true;
 bool is_st_mode = false;
 
 //! Локальные Макроопределения
+#define PIN_INDICATION     D4
 #define WIFI_SSID              400
 #define WIFI_PASSWORD          450
 
@@ -153,9 +154,12 @@ bool check_wifi()
 //! Глобальные функции
 void init_wifi()
 {
-  get_wifi_from_eeprom();
   bool is_wifi = false; 
   int exit_wifi_connect = 0;
+  bool led_indicator_status = false;
+  pinMode(PIN_INDICATION, OUTPUT);
+  get_wifi_from_eeprom();
+
   if (is_st_mode)
     is_wifi = check_wifi();
   INFO("WiFi Init");
@@ -176,8 +180,12 @@ void init_wifi()
     {
       delay(500);
       Serial.print(".");
+      digitalWrite(PIN_INDICATION, led_indicator_status);
+      led_indicator_status = !led_indicator_status;
       exit_wifi_connect++;
     }
+    Serial.println("");
+    digitalWrite(PIN_INDICATION, HIGH);
     INFO("WiFi connected");
     wifi_set_event_handler_cb(wifi_event_handler_cb);
     INFO(WiFi.localIP());
