@@ -67,11 +67,13 @@ void get_wifi_from_eeprom()
   {
     is_st_mode = false;
     is_at_mode = true;
+    INFO("AT Mode");
   }
   else
   {
     is_st_mode = true;
     is_at_mode = false;
+    INFO("ST Mode");
   }
   
   EEPROM.end();
@@ -138,6 +140,7 @@ bool check_wifi()
       }
     }
     INFO("WiFi Точка не найдена");
+    EEPROM.begin(EEPROM_SIZE); 
     for(int i = 0; i < 32; i++)
     {
       EEPROM.write(WIFI_SSID + i, 255);
@@ -146,6 +149,7 @@ bool check_wifi()
     {
       EEPROM.write(WIFI_PASSWORD + i, 255);
     }
+    EEPROM.end();
     ESP.deepSleep(1000, WAKE_RF_DEFAULT);
   }
   return result;

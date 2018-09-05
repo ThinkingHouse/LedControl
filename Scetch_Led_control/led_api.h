@@ -84,6 +84,26 @@ void set_leds_colors(led_id_t led_id, int16_t red, int16_t green, int16_t blue);
 void set_brightness(led_id_t led_id, int16_t value);
 
 /*!
+ *  \brief         Получить цвет светодода на ленте 
+ *  
+ *  \param         led_id - Номер ленты
+ *  
+ *  \return        Цвет в формате для HTML
+ *  
+ */
+String get_leds_colors(led_id_t led_id);
+
+/*!
+ *  \brief         Получить интенсивность светодода на ленте 
+ *  
+ *  \param         led_id - Номер ленты
+ *  
+ *  \return        Интенсивность в формате для HTML
+ *  
+ */
+String get_brightness(led_id_t led_id);
+
+/*!
  *  \brief         Задать программу светодода на ленте 
  *  
  *  \param         led_id - Номер ленты

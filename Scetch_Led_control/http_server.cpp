@@ -16,6 +16,17 @@
 //! Локальные данные
 ESP8266WebServer server(80);
 
+String led_1_color_html;
+String led_2_color_html;
+String led_3_color_html;
+String led_4_color_html;
+
+String led_1_brightness_html;
+String led_2_brightness_html;
+String led_3_brightness_html;
+String led_4_brightness_html;
+
+
 String main_page = "<!DOCTYPE html>" \
                    "<html>" \
                    "<head>"
@@ -24,19 +35,19 @@ String main_page = "<!DOCTYPE html>" \
                    "</head>" \
                    "<body>" \   
                    "  <form action=\"set_color_1\">" \
-                   "    <p>Укажите цвет ленты 1: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\">" \
+                   "    <p>Укажите цвет ленты 1: <input type=\"color\" name=\"color\" value=\"$COLOR1\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"$BRIGHTNESS1\"> Программа: <input type=\"text\" name=\"programm\" value=\"0\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \ 
                    "  <form action=\"set_color_2\">" \
-                   "    <p>Укажите цвет ленты 2: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\">" \
+                   "    <p>Укажите цвет ленты 2: <input type=\"color\" name=\"color\" value=\"$COLOR2\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"$BRIGHTNESS2\"> Программа: <input type=\"text\" name=\"programm\" value=\"0\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
                     "  <form action=\"set_color_3\">" \
-                   "    <p>Укажите цвет ленты 3: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\">" \
+                   "    <p>Укажите цвет ленты 3: <input type=\"color\" name=\"color\" value=\"$COLOR3\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"$BRIGHTNESS3\"> Программа: <input type=\"text\" name=\"programm\" value=\"0\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
                    "  <form action=\"set_color_4\">" \
-                   "    <p>Укажите цвет ленты 4: <input type=\"color\" name=\"color\" value=\"#ff0000\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"255\"> Программа: <input type=\"text\" name=\"programm\" value=\"0\">" \
+                   "    <p>Укажите цвет ленты 4: <input type=\"color\" name=\"color\" value=\"$COLOR4\"> Интенсивность: <input type=\"text\" name=\"brightness\" value=\"$BRIGHTNESS4\"> Программа: <input type=\"text\" name=\"programm\" value=\"0\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
                    "  <form action=\"set_wifi\">" \
@@ -44,7 +55,7 @@ String main_page = "<!DOCTYPE html>" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
                    "  <form action=\"set_delay\">" \
-                   "    <p>Плавность: <input type=\"text\" name=\"delay\" value=\"\">" \
+                   "    <p>Служебный параметр: <input type=\"text\" name=\"delay\" value=\"\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
                    "</body>" \ 
@@ -53,9 +64,28 @@ String main_page = "<!DOCTYPE html>" \
 //! Локальные Макроопределения
 
 //! Локальные функции
+String get_main_page()
+{
+  String result = main_page;
+
+  result.replace("$COLOR1", led_1_color_html);
+  result.replace("$BRIGHTNESS1", led_1_brightness_html);
+
+  result.replace("$COLOR2", led_2_color_html);
+  result.replace("$BRIGHTNESS2", led_2_brightness_html);
+
+  result.replace("$COLOR3", led_3_color_html);
+  result.replace("$BRIGHTNESS3", led_3_brightness_html);
+
+  result.replace("$COLOR4", led_4_color_html);
+  result.replace("$BRIGHTNESS4", led_4_brightness_html);
+
+  return result;
+}
+
 void handle_main() 
 {
-  server.send(200, "text/html", main_page);
+  server.send(200, "text/html", get_main_page());
 }
 
 void handle_set_color_1()
@@ -76,7 +106,10 @@ void handle_set_color_1()
   set_brightness(LED_1, server.arg("brightness").toInt());
   set_programm(LED_1, server.arg("programm").toInt());
   update_leds_colors(LED_1);
-  server.send(200, "text/html", main_page);
+
+  led_1_color_html = server.arg("color");
+  led_1_brightness_html = server.arg("brightness");
+  server.send(200, "text/html", get_main_page());
 }
 
 void handle_set_color_2()
@@ -97,7 +130,10 @@ void handle_set_color_2()
   set_brightness(LED_2, server.arg("brightness").toInt());
   set_programm(LED_2, server.arg("programm").toInt());
   update_leds_colors(LED_2);
-  server.send(200, "text/html", main_page);
+
+  led_2_color_html = server.arg("color");
+  led_2_brightness_html = server.arg("brightness");
+  server.send(200, "text/html", get_main_page());
 }
 
 void handle_set_color_3()
@@ -118,7 +154,10 @@ void handle_set_color_3()
   set_brightness(LED_3, server.arg("brightness").toInt());
   set_programm(LED_3, server.arg("programm").toInt());
   update_leds_colors(LED_3);
-  server.send(200, "text/html", main_page);
+
+  led_3_color_html = server.arg("color");
+  led_3_brightness_html = server.arg("brightness");
+  server.send(200, "text/html", get_main_page());
 }
 
 void handle_set_color_4()
@@ -138,7 +177,10 @@ void handle_set_color_4()
   set_brightness(LED_4, server.arg("brightness").toInt());
   set_programm(LED_4, server.arg("programm").toInt());
   update_leds_colors(LED_4);
-  server.send(200, "text/html", main_page);
+
+  led_4_color_html = server.arg("color");
+  led_4_brightness_html = server.arg("brightness");
+  server.send(200, "text/html", get_main_page());
 }
 
 void handle_set_wifi()
@@ -148,7 +190,7 @@ void handle_set_wifi()
   String ssid = server.arg("ssid");
   String password = server.arg("password");
   set_wifi_data(ssid, password);
-  server.send(200, "text/html", main_page);
+  server.send(200, "text/html", get_main_page());
   delay(200);
   ESP.deepSleep(1000, WAKE_RF_DEFAULT);
 }
@@ -159,7 +201,7 @@ void handle_set_delay()
   INFO(server.uri());
   String delay_str = server.arg("delay");
   set_main_delay(delay_str);
-  server.send(200, "text/html", main_page);
+  server.send(200, "text/html", get_main_page());
 }
 
 void handleNotFound()
@@ -191,6 +233,16 @@ void init_server()
   server.on("/set_delay", handle_set_delay);
   server.onNotFound(handleNotFound);
   server.begin();
+
+  led_1_color_html = get_leds_colors(LED_1);
+  led_2_color_html = get_leds_colors(LED_2);
+  led_3_color_html = get_leds_colors(LED_3);
+  led_4_color_html = get_leds_colors(LED_4);
+
+  led_1_brightness_html = get_brightness(LED_1);
+  led_2_brightness_html = get_brightness(LED_2);
+  led_3_brightness_html = get_brightness(LED_3);
+  led_4_brightness_html = get_brightness(LED_4);
   INFO("HTTP сервер запущен");
 }
  
