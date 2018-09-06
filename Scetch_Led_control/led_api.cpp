@@ -244,6 +244,7 @@ void fire_programm(led_id_t led_id)
 void init_leds()
 {
   int address_cursor = 0;
+  INFO("Led init start");
   led_pixels_1.begin();
   led_pixels_2.begin();
   led_pixels_3.begin();
@@ -300,7 +301,8 @@ void init_leds()
   led_2_programm = EEPROM.read(LED_2_PROGRAMM);
   led_3_programm = EEPROM.read(LED_3_PROGRAMM);
   led_4_programm = EEPROM.read(LED_4_PROGRAMM);
-  
+
+  DEBUG("Led update");
   update_leds_colors(LED_1);
   update_leds_colors(LED_2);
   update_leds_colors(LED_3);
