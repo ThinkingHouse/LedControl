@@ -15,7 +15,7 @@
 
 //! Подключение заголовочных файлов
 #include "common.h"
-#include <FastLED.h>
+#include "programms.h"
 #include <Adafruit_NeoPixel.h>
 #include <EEPROM.h>
 
