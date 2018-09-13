@@ -531,6 +531,10 @@ String get_brightness(led_id_t led_id)
 void set_programm(led_id_t led_id, int8_t value)
 {
   EEPROM.begin(EEPROM_SIZE);
+  if (value == 0)
+  {
+    return;
+  }
   switch(led_id)
   {
     case LED_1:
@@ -621,6 +625,10 @@ void update_leds_colors(led_id_t led_id)
           led_pixels_4.showColor(CRGB(led_4_colors[i][RED_COLOR], led_4_colors[i][GREEN_COLOR], led_4_colors[i][BLUE_COLOR]), led_4_brightness);
           delay(1);
         }
+      }
+      else
+      {
+        INFO("На ленте 4 выполняется программа №" + String(led_4_programm) + "\n");
       }
       break;
   }
@@ -961,7 +969,7 @@ DEFINE_GRADIENT_PALETTE( fire ) {
    255,   128, 0,255,
   255,   255,0,255};
 
-void programm_test(int programm)
+void programm_led_4(int programm)
 {
   CRGBPalette16 gPalette;
   switch(programm)
@@ -1126,9 +1134,6 @@ void do_programm_led_4()
   {
     return;
   }
-  
-  DEBUG("Выполняем программу");
-  DEBUG(led_4_programm);
   switch(led_4_programm)
   {
     case 1: //FIRE
@@ -1140,13 +1145,9 @@ void do_programm_led_4()
       break;
 
     default:
-      programm_test(led_4_programm);
+      programm_led_4(led_4_programm);
       break;
   }
-      //colorwaves( leds_4, LED_4_NUMBER_PIXELS, gCurrentPalette);
-
-    //led_pixels_4.show();
-    //led_pixels_4.delay(20);
 }
 
 void do_programm()

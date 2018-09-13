@@ -30,7 +30,7 @@ float get_time()
 void init_debug()
 {
   Serial.begin(115200);
-  Serial.setDebugOutput(true);
+  //Serial.setDebugOutput(true);
   cpu_freq = ESP.getCpuFreqMHz() * 1000000;
   EEPROM.begin(EEPROM_SIZE);
   main_delay = EEPROM.read(500);
