@@ -531,10 +531,10 @@ String get_brightness(led_id_t led_id)
 void set_programm(led_id_t led_id, int8_t value)
 {
   EEPROM.begin(EEPROM_SIZE);
-  if (value == 0)
-  {
-    return;
-  }
+//  if (value == 0)
+//  {
+//    return;
+//  }
   switch(led_id)
   {
     case LED_1:

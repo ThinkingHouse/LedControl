@@ -58,6 +58,9 @@ String main_page = "<!DOCTYPE html>" \
                    "    <p>Служебный параметр: <input type=\"text\" name=\"delay\" value=\"\">" \
                    "    <input type=\"submit\" value=\"Выбрать\"></p>" \ 
                    "   </form>" \
+                   "  <form action=\"reset\">" \
+                   "    <input type=\"submit\" value=\"Restart\"></p>" \ 
+                   "   </form>" \
                    "</body>" \ 
                    " </html>";
 
@@ -173,6 +176,8 @@ void handle_set_color_4()
   int blue = strtol(col.c_str(),NULL,0);
   INFO("Получен цвет");
   INFO(String(red) + String(" ") + String(green) + String(" ") + String(blue));
+  INFO("Получен номер программы");
+  INFO(server.arg("programm").toInt());
   set_leds_colors(LED_4, red, green, blue);
   set_brightness(LED_4, server.arg("brightness").toInt());
   set_programm(LED_4, server.arg("programm").toInt());
@@ -204,6 +209,13 @@ void handle_set_delay()
   server.send(200, "text/html", get_main_page());
 }
 
+void handle_reset()
+{
+  server.send(200, "text/html", get_main_page());
+  delay(200);
+  ESP.deepSleep(1000, WAKE_RF_DEFAULT);
+}
+
 void handleNotFound()
 {
   String message = "File Not Found\n\n";
@@ -231,6 +243,7 @@ void init_server()
   server.on("/set_color_4", handle_set_color_4);
   server.on("/set_wifi", handle_set_wifi);
   server.on("/set_delay", handle_set_delay);
+  server.on("/reset", handle_reset);
   server.onNotFound(handleNotFound);
   server.begin();
 

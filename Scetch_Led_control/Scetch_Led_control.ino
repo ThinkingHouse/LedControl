@@ -45,5 +45,5 @@ void loop()
 {
 	check_clinets();
   do_programm();
-  delay(get_main_delay());
+  //delay(get_main_delay());
 }
